@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>yabu master</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #222;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #controls input, #controls button {
+      font-size: 16px;
+      padding: 5px 10px;
+      margin: 0 5px;
+    }
+    #tracks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .track {
+      margin: 10px;
+      width: 300px;
+      border: 1px solid #444;
+      padding: 10px;
+      background: #333;
+    }
+    .track .sample-control, .track .mixer-controls {
+      margin-bottom: 10px;
+    }
+    .track label {
+      font-size: 12px;
+      margin-right: 5px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .mixer-controls label {
+      display: inline-block;
+      margin-right: 10px;
+      font-size: 12px;
+    }
+    .mixer-controls input[type="range"] {
+      vertical-align: middle;
+    }
+    .grid {
+      border-collapse: collapse;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .grid td {
+      width: calc(100% / 16);
+      height: 30px;
+      border: 1px solid #555;
+      cursor: pointer;
+      text-align: center;
+      vertical-align: middle;
+      user-select: none;
+      transition: background 0.2s, border 0.2s;
+    }
+    .grid td.active {
+      background: #f90;
+    }
+    .grid td.current {
+      border: 2px solid #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>yabu master</h1>
+  <div id="controls">
+    <label>BPM: <input type="number" id="bpm" value="120" min="60" max="240"></label>
+    <button id="playButton">Play</button>
+    <button id="stopButton" disabled>Stop</button>
+    <button id="exportPatternButton">Export Pattern</button>
+    <button id="importPatternButton">Import Pattern</button>
+    <input type="file" id="importPatternInput" accept=".json" style="display:none;">
+  </div>
+
+  <div id="tracks">
+    <!-- 各トラック：サンプル読み込み、ミキサーコントロール、16ステップグリッド -->
+    <div class="track" data-track="0">
+      <div class="sample-control">
+        <label>Track 1 Sample:
+          <input type="file" accept="audio/*" class="sampleInput">
+        </label>
+      </div>
+      <div class="mixer-controls">
+        <label>Volume: <input type="range" min="0" max="1" step="0.01" value="1" class="volumeSlider"></label>
+        <label>Pan: <input type="range" min="-1" max="1" step="0.01" value="0" class="panSlider"></label>
+        <label>Filter: <input type="range" min="500" max="22050" step="1" value="22050" class="filterSlider"></label>
+        <label>Delay Time: <input type="range" min="0" max="1" step="0.01" value="0" class="delayTimeSlider"></label>
+        <label>Delay FB: <input type="range" min="0" max="0.9" step="0.01" value="0" class="delayFeedbackSlider"></label>
+        <label>Mute: <input type="checkbox" class="muteCheckbox"></label>
+        <label>Solo: <input type="checkbox" class="soloCheckbox"></label>
+      </div>
+      <table class="grid">
+        <tr>
+          <td data-step="0"></td>
+          <td data-step="1"></td>
+          <td data-step="2"></td>
+          <td data-step="3"></td>
+          <td data-step="4"></td>
+          <td data-step="5"></td>
+          <td data-step="6"></td>
+          <td data-step="7"></td>
+          <td data-step="8"></td>
+          <td data-step="9"></td>
+          <td data-step="10"></td>
+          <td data-step="11"></td>
+          <td data-step="12"></td>
+          <td data-step="13"></td>
+          <td data-step="14"></td>
+          <td data-step="15"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="track" data-track="1">
+      <div class="sample-control">
+        <label>Track 2 Sample:
+          <input type="file" accept="audio/*" class="sampleInput">
+        </label>
+      </div>
+      <div class="mixer-controls">
+        <label>Volume: <input type="range" min="0" max="1" step="0.01" value="1" class="volumeSlider"></label>
+        <label>Pan: <input type="range" min="-1" max="1" step="0.01" value="0" class="panSlider"></label>
+        <label>Filter: <input type="range" min="500" max="22050" step="1" value="22050" class="filterSlider"></label>
+        <label>Delay Time: <input type="range" min="0" max="1" step="0.01" value="0" class="delayTimeSlider"></label>
+        <label>Delay FB: <input type="range" min="0" max="0.9" step="0.01" value="0" class="delayFeedbackSlider"></label>
+        <label>Mute: <input type="checkbox" class="muteCheckbox"></label>
+        <label>Solo: <input type="checkbox" class="soloCheckbox"></label>
+      </div>
+      <table class="grid">
+        <tr>
+          <td data-step="0"></td>
+          <td data-step="1"></td>
+          <td data-step="2"></td>
+          <td data-step="3"></td>
+          <td data-step="4"></td>
+          <td data-step="5"></td>
+          <td data-step="6"></td>
+          <td data-step="7"></td>
+          <td data-step="8"></td>
+          <td data-step="9"></td>
+          <td data-step="10"></td>
+          <td data-step="11"></td>
+          <td data-step="12"></td>
+          <td data-step="13"></td>
+          <td data-step="14"></td>
+          <td data-step="15"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="track" data-track="2">
+      <div class="sample-control">
+        <label>Track 3 Sample:
+          <input type="file" accept="audio/*" class="sampleInput">
+        </label>
+      </div>
+      <div class="mixer-controls">
+        <label>Volume: <input type="range" min="0" max="1" step="0.01" value="1" class="volumeSlider"></label>
+        <label>Pan: <input type="range" min="-1" max="1" step="0.01" value="0" class="panSlider"></label>
+        <label>Filter: <input type="range" min="500" max="22050" step="1" value="22050" class="filterSlider"></label>
+        <label>Delay Time: <input type="range" min="0" max="1" step="0.01" value="0" class="delayTimeSlider"></label>
+        <label>Delay FB: <input type="range" min="0" max="0.9" step="0.01" value="0" class="delayFeedbackSlider"></label>
+        <label>Mute: <input type="checkbox" class="muteCheckbox"></label>
+        <label>Solo: <input type="checkbox" class="soloCheckbox"></label>
+      </div>
+      <table class="grid">
+        <tr>
+          <td data-step="0"></td>
+          <td data-step="1"></td>
+          <td data-step="2"></td>
+          <td data-step="3"></td>
+          <td data-step="4"></td>
+          <td data-step="5"></td>
+          <td data-step="6"></td>
+          <td data-step="7"></td>
+          <td data-step="8"></td>
+          <td data-step="9"></td>
+          <td data-step="10"></td>
+          <td data-step="11"></td>
+          <td data-step="12"></td>
+          <td data-step="13"></td>
+          <td data-step="14"></td>
+          <td data-step="15"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="track" data-track="3">
+      <div class="sample-control">
+        <label>Track 4 Sample:
+          <input type="file" accept="audio/*" class="sampleInput">
+        </label>
+      </div>
+      <div class="mixer-controls">
+        <label>Volume: <input type="range" min="0" max="1" step="0.01" value="1" class="volumeSlider"></label>
+        <label>Pan: <input type="range" min="-1" max="1" step="0.01" value="0" class="panSlider"></label>
+        <label>Filter: <input type="range" min="500" max="22050" step="1" value="22050" class="filterSlider"></label>
+        <label>Delay Time: <input type="range" min="0" max="1" step="0.01" value="0" class="delayTimeSlider"></label>
+        <label>Delay FB: <input type="range" min="0" max="0.9" step="0.01" value="0" class="delayFeedbackSlider"></label>
+        <label>Mute: <input type="checkbox" class="muteCheckbox"></label>
+        <label>Solo: <input type="checkbox" class="soloCheckbox"></label>
+      </div>
+      <table class="grid">
+        <tr>
+          <td data-step="0"></td>
+          <td data-step="1"></td>
+          <td data-step="2"></td>
+          <td data-step="3"></td>
+          <td data-step="4"></td>
+          <td data-step="5"></td>
+          <td data-step="6"></td>
+          <td data-step="7"></td>
+          <td data-step="8"></td>
+          <td data-step="9"></td>
+          <td data-step="10"></td>
+          <td data-step="11"></td>
+          <td data-step="12"></td>
+          <td data-step="13"></td>
+          <td data-step="14"></td>
+          <td data-step="15"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // グローバル変数の定義
+    let audioContext;
+    const numSteps = 16;
+    let currentStep = 0;
+    let timer;
+    // 各トラックのサンプルデータを保持（sampleBuffer）
+    const tracks = [];
+
+    // 各トラックの初期化：サンプル読み込み＆グリッドのクリックイベント
+    document.querySelectorAll('.track').forEach((trackDiv, trackIndex) => {
+      tracks[trackIndex] = { sampleBuffer: null };
+
+      // サンプルファイルの読み込み
+      const fileInput = trackDiv.querySelector('.sampleInput');
+      fileInput.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const arrayBuffer = e.target.result;
+            if (!audioContext) {
+              audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            audioContext.decodeAudioData(arrayBuffer, function(buffer) {
+              tracks[trackIndex].sampleBuffer = buffer;
+            });
+          }
+          reader.readAsArrayBuffer(file);
+        }
+      });
+
+      // グリッドセルをクリックでオン／オフ切替
+      trackDiv.querySelectorAll('td').forEach(td => {
+        td.addEventListener('click', function() {
+          this.classList.toggle('active');
+        });
+      });
+    });
+
+    // 各ステップ再生時の処理
+    function playStep() {
+      // 現在のステップを示すセルの更新
+      document.querySelectorAll('.grid td').forEach(td => {
+        td.classList.remove('current');
+      });
+      document.querySelectorAll(`.grid td[data-step="${currentStep}"]`).forEach(td => {
+        td.classList.add('current');
+      });
+
+      // ソロがある場合、soloチェックが入っているトラックのみ再生
+      let anySolo = false;
+      document.querySelectorAll('.track').forEach(trackDiv => {
+        const solo = trackDiv.querySelector('.soloCheckbox');
+        if (solo && solo.checked) anySolo = true;
+      });
+
+      // 各トラックの再生処理
+      document.querySelectorAll('.track').forEach((trackDiv, trackIndex) => {
+        const soloChecked = trackDiv.querySelector('.soloCheckbox').checked;
+        const muteChecked = trackDiv.querySelector('.muteCheckbox').checked;
+        if (anySolo && !soloChecked) return; // ソロが有効なら、soloでないトラックは再生しない
+        const cell = trackDiv.querySelector(`td[data-step="${currentStep}"]`);
+        if (cell && cell.classList.contains('active')) {
+          playTrackSample(trackIndex, trackDiv);
+        }
+      });
+      // 次のステップへ（ループ）
+      currentStep = (currentStep + 1) % numSteps;
+    }
+
+    // 各トラックのサンプルを、ミキサー・エフェクト付きで再生
+    function playTrackSample(trackIndex, trackDiv) {
+      const buffer = tracks[trackIndex].sampleBuffer;
+      if (!buffer) return;
+      const source = audioContext.createBufferSource();
+      source.buffer = buffer;
+
+      // ミキサーコントロールの値を取得
+      let volume = parseFloat(trackDiv.querySelector('.volumeSlider').value);
+      let pan = parseFloat(trackDiv.querySelector('.panSlider').value);
+      let filterFreq = parseFloat(trackDiv.querySelector('.filterSlider').value);
+      let delayTime = parseFloat(trackDiv.querySelector('.delayTimeSlider').value);
+      let delayFeedback = parseFloat(trackDiv.querySelector('.delayFeedbackSlider').value);
+      const mute = trackDiv.querySelector('.muteCheckbox').checked;
+      if (mute) volume = 0; // Muteがオンなら音量は0
+
+      // 各種ノードの生成
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = volume;
+
+      const pannerNode = audioContext.createStereoPanner();
+      pannerNode.pan.value = pan;
+
+      const filterNode = audioContext.createBiquadFilter();
+      filterNode.type = "lowpass";
+      filterNode.frequency.value = filterFreq;
+
+      // Delayエフェクトが有効ならエフェクトチェーンを構築
+      if (delayTime > 0 && delayFeedback > 0) {
+        const delayNode = audioContext.createDelay();
+        delayNode.delayTime.value = delayTime;
+        const feedbackGain = audioContext.createGain();
+        feedbackGain.gain.value = delayFeedback;
+
+        // ドライ／ウェットミックス（ここでは固定比率: wet 0.5）
+        const dryGain = audioContext.createGain();
+        dryGain.gain.value = 1;
+        const wetGain = audioContext.createGain();
+        wetGain.gain.value = 0.5;
+
+        // 接続： source → gain → panner → filter → {dry, delay chain} → merger → destination
+        source.connect(gainNode);
+        gainNode.connect(pannerNode);
+        pannerNode.connect(filterNode);
+
+        filterNode.connect(dryGain);
+        filterNode.connect(delayNode);
+        delayNode.connect(feedbackGain);
+        feedbackGain.connect(delayNode);
+        delayNode.connect(wetGain);
+
+        const merger = audioContext.createGain();
+        dryGain.connect(merger);
+        wetGain.connect(merger);
+        merger.connect(audioContext.destination);
+      } else {
+        // Delayなしの場合のシンプルチェーン
+        source.connect(gainNode);
+        gainNode.connect(pannerNode);
+        pannerNode.connect(filterNode);
+        filterNode.connect(audioContext.destination);
+      }
+      source.start();
+    }
+
+    // 再生開始／停止ボタンのイベント設定
+    document.getElementById("playButton").addEventListener('click', function() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const bpm = parseInt(document.getElementById("bpm").value);
+      const interval = (60 / bpm) / 4 * 1000; // 16分音符の間隔
+      timer = setInterval(playStep, interval);
+      this.disabled = true;
+      document.getElementById("stopButton").disabled = false;
+    });
+
+    document.getElementById("stopButton").addEventListener('click', function() {
+      clearInterval(timer);
+      document.getElementById("playButton").disabled = false;
+      this.disabled = true;
+      document.querySelectorAll('.grid td').forEach(td => {
+        td.classList.remove('current');
+      });
+    });
+
+    // パターンのエクスポート（JSON形式で各トラックのグリッド＆ミキサー設定を保存）
+    document.getElementById("exportPatternButton").addEventListener('click', function() {
+      const pattern = { tracks: [] };
+      document.querySelectorAll('.track').forEach((trackDiv, trackIndex) => {
+        const trackData = {};
+        const cells = trackDiv.querySelectorAll('.grid td');
+        const grid = [];
+        cells.forEach(cell => {
+          grid.push(cell.classList.contains('active'));
+        });
+        trackData.grid = grid;
+        // ミキサー・エフェクトの各パラメータ
+        trackData.volume = parseFloat(trackDiv.querySelector('.volumeSlider').value);
+        trackData.pan = parseFloat(trackDiv.querySelector('.panSlider').value);
+        trackData.filter = parseFloat(trackDiv.querySelector('.filterSlider').value);
+        trackData.delayTime = parseFloat(trackDiv.querySelector('.delayTimeSlider').value);
+        trackData.delayFeedback = parseFloat(trackDiv.querySelector('.delayFeedbackSlider').value);
+        trackData.mute = trackDiv.querySelector('.muteCheckbox').checked;
+        trackData.solo = trackDiv.querySelector('.soloCheckbox').checked;
+        pattern.tracks.push(trackData);
+      });
+      pattern.bpm = document.getElementById('bpm').value;
+      const json = JSON.stringify(pattern, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pattern.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // パターンのインポート：JSONファイルから各トラックのグリッド＆ミキサー設定を復元
+    document.getElementById("importPatternButton").addEventListener('click', function() {
+      document.getElementById("importPatternInput").click();
+    });
+    document.getElementById("importPatternInput").addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const pattern = JSON.parse(e.target.result);
+          document.getElementById('bpm').value = pattern.bpm || 120;
+          pattern.tracks.forEach((trackData, trackIndex) => {
+            const trackDiv = document.querySelector(`.track[data-track="${trackIndex}"]`);
+            if (!trackDiv) return;
+            const cells = trackDiv.querySelectorAll('.grid td');
+            cells.forEach((cell, idx) => {
+              if (trackData.grid && trackData.grid[idx]) {
+                cell.classList.add('active');
+              } else {
+                cell.classList.remove('active');
+              }
+            });
+            trackDiv.querySelector('.volumeSlider').value = trackData.volume;
+            trackDiv.querySelector('.panSlider').value = trackData.pan;
+            trackDiv.querySelector('.filterSlider').value = trackData.filter;
+            trackDiv.querySelector('.delayTimeSlider').value = trackData.delayTime;
+            trackDiv.querySelector('.delayFeedbackSlider').value = trackData.delayFeedback;
+            trackDiv.querySelector('.muteCheckbox').checked = trackData.mute;
+            trackDiv.querySelector('.soloCheckbox').checked = trackData.solo;
+          });
+        } catch (err) {
+          alert("パターンの読み込みに失敗しました。");
+        }
+      };
+      reader.readAsText(file);
+    });
+  </script>
+</body>
+</html>
